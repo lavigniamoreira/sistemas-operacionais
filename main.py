@@ -109,27 +109,33 @@ def FCFS(execucao, espera, restante, chegada):
     tempo_execucao = list(execucao)
     tempo_espera = list(espera)
     tempo_restante = list(restante)
-    # tempo_chegada = list(chegada)
+    tempo_chegada = list(chegada)
 
-    processo_em_execucao = 0  # processo inicial no FIFO e o zero
+    #processo_em_execucao = 0   processo inicial no FIFO e o zero
+    lista_indices = sorted(range(n_processos), key=lambda indice: tempo_chegada[indice])
+    posicao_fila = 0
+    processo_em_execucao = lista_indices[posicao_fila]
 
     # implementar codigo do FCFS
     for i in range(1, MAXIMO_TEMPO_EXECUCAO):
-        print("tempo[" + str(i) + "]: processo[" + str(processo_em_execucao) + "] restante=" +
-              str(tempo_restante[processo_em_execucao]))
-
-        if tempo_execucao[processo_em_execucao] == tempo_restante[processo_em_execucao]:
-            tempo_espera[processo_em_execucao] = i - 1
-
-        if tempo_restante[processo_em_execucao] == 1:
-            if processo_em_execucao == (n_processos - 1):
-                break
-            else:
-                processo_em_execucao = processo_em_execucao + 1
+        if tempo_chegada[processo_em_execucao] > (i - 1):
+            pass
         else:
-            tempo_restante[processo_em_execucao] = tempo_restante[processo_em_execucao] - 1
-    #
-
+            print("tempo[" + str(i) + "]: processo[" + str(processo_em_execucao) + "] restante=" + str(tempo_restante[processo_em_execucao]))
+        
+            if tempo_execucao[processo_em_execucao] == tempo_restante[processo_em_execucao]:
+                tempo_espera[processo_em_execucao] = (i - 1) - tempo_chegada[processo_em_execucao]
+    
+            if tempo_restante[processo_em_execucao] == 1:
+                if posicao_fila == len(lista_indices) - 1:
+                    break
+                else:
+                    posicao_fila = posicao_fila + 1
+                    processo_em_execucao = lista_indices[posicao_fila]
+            else:
+                tempo_restante[processo_em_execucao] = tempo_restante[processo_em_execucao] - 1
+        #
+    
     imprime_stats(tempo_espera)
 
 
